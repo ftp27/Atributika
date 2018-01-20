@@ -8,16 +8,16 @@ import Foundation
     
 import UIKit
 
-public class AttributedLabel: UIView {
+open class AttributedLabel: UIView {
     
     //MARK: - private properties
     private let label = UILabel()
     private var detectionAreaButtons = [DetectionAreaButton]()
     
     //MARK: - public properties
-    public var onClick: ((AttributedLabel, Detection)->Void)?
+    open var onClick: ((AttributedLabel, Detection)->Void)?
     
-    public var textInsets: UIEdgeInsets = .zero {
+    open var textInsets: UIEdgeInsets = .zero {
         didSet {
             let prevConstraints = constraints.filter { ($0.firstItem as? UILabel) == label || ($0.secondItem as? UILabel) == label }
             removeConstraints(prevConstraints)
@@ -33,7 +33,7 @@ public class AttributedLabel: UIView {
         }
     }
     
-    public var isEnabled: Bool {
+    open var isEnabled: Bool {
         set {
             detectionAreaButtons.forEach { $0.isUserInteractionEnabled = newValue  }
             state.isEnabled = newValue
@@ -43,7 +43,7 @@ public class AttributedLabel: UIView {
         }
     }
     
-    public var attributedText: AttributedText? {
+    open var attributedText: AttributedText? {
         set {
             state.attributedTextAndString = newValue.map { ($0, $0.attributedString) }
             setNeedsLayout()
@@ -54,37 +54,37 @@ public class AttributedLabel: UIView {
     }
     
     //MARK: - public properties redirected to underlying UILabel
-    public var font: UIFont {
+    open var font: UIFont {
         set { label.font = newValue }
         get { return label.font }
     }
     
-    public var numberOfLines: Int {
+    open var numberOfLines: Int {
         set { label.numberOfLines = newValue }
         get { return label.numberOfLines }
     }
     
-    public var textAlignment: NSTextAlignment {
+    open var textAlignment: NSTextAlignment {
         set { label.textAlignment = newValue }
         get { return label.textAlignment }
     }
     
-    public var lineBreakMode: NSLineBreakMode {
+    open var lineBreakMode: NSLineBreakMode {
         set { label.lineBreakMode = newValue }
         get { return label.lineBreakMode }
     }
     
-    public var textColor: UIColor {
+    open var textColor: UIColor {
         set { label.textColor = newValue }
         get { return label.textColor }
     }
     
-    public var shadowColor: UIColor? {
+    open var shadowColor: UIColor? {
         set { label.shadowColor = newValue }
         get { return label.shadowColor }
     }
     
-    public var shadowOffset: CGSize {
+    open var shadowOffset: CGSize {
         set { label.shadowOffset = newValue }
         get { return label.shadowOffset }
     }
@@ -109,7 +109,7 @@ public class AttributedLabel: UIView {
     }
     
     //MARK: - overrides
-    public override func layoutSubviews() {
+    open override func layoutSubviews() {
         super.layoutSubviews()
         
         detectionAreaButtons.forEach {
@@ -149,7 +149,7 @@ public class AttributedLabel: UIView {
         }
     }
     
-    public override func sizeThatFits(_ size: CGSize) -> CGSize {
+    open override func sizeThatFits(_ size: CGSize) -> CGSize {
         return label.sizeThatFits(size)
     }
 
@@ -235,7 +235,7 @@ public class AttributedLabel: UIView {
 
 extension NSAttributedString {
     
-    func withInherited(font: UIFont, textAlignment: NSTextAlignment) -> NSAttributedString {
+    fileprivate func withInherited(font: UIFont, textAlignment: NSTextAlignment) -> NSAttributedString {
         
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = textAlignment
