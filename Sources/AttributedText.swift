@@ -92,6 +92,18 @@ extension AttributedTextProtocol {
         return AttributedText(string: string, detections: detections, baseStyle: baseStyle.merged(with: style))
     }
     
+    public func fontFamily(_ font: UIFont) -> AttributedText {
+        var result = detections.map { (detection) -> Detection in
+//            let attributies = detection.style.attributes
+//            guard let oldFont = attributies[NSAttributedStringKey.font] as? UIFont,
+//                  let oldWeight = oldFont.weight else { return detection }
+            return Detection(type: detection.type,
+                             style: detection.style.font(font),
+                             range: detection.range)
+        }
+        return AttributedText(string: string, detections: result, baseStyle: baseStyle)
+    }
+    
     /// style things like #xcode #mentions
     public func styleHashtags(_ style: Style) -> AttributedText {
         let ranges = string.detectHashTags()
@@ -177,5 +189,64 @@ extension NSAttributedString: AttributedTextProtocol {
     
     public var baseStyle: Style {
         return Style()
+    }
+}
+
+extension UIFont.Weight {
+    @available(iOS 8.2, *)
+    var string: String? {
+        switch self {
+        case UIFont.Weight.ultraLight:
+            return "UltraLight"
+        case UIFont.Weight.thin:
+            return "Thin"
+        case UIFont.Weight.light:
+            return "Light"
+        case UIFont.Weight.regular:
+            return "Regular"
+        case UIFont.Weight.medium:
+            return "Medium"
+        case UIFont.Weight.semibold:
+            return "SemiBold"
+        case UIFont.Weight.bold:
+            return "Bold"
+        case UIFont.Weight.heavy:
+            return "Heavy"
+        case UIFont.Weight.black:
+            return "Black"
+        default:
+            return nil
+        }
+    }
+}
+
+extension UIFont {
+    @available(iOS 8.2, *)
+    var weight: UIFont.Weight {
+        guard let substring = fontName.split(separator: "-").last else { return UIFont.Weight.regular }
+        let weightString = String(substring)
+        switch weightString {
+        case "UltraLight":
+            return UIFont.Weight.ultraLight
+        case "Thin":
+            return UIFont.Weight.thin
+        case "Light":
+            return UIFont.Weight.light
+        case "Regular":
+            return UIFont.Weight.regular
+        case "Medium":
+            return UIFont.Weight.medium
+        case "SemiBold":
+            return UIFont.Weight.semibold
+        case "Bold":
+            return UIFont.Weight.bold
+        case "Heavy":
+            return UIFont.Weight.heavy
+        case "Black":
+            return UIFont.Weight.black
+        default:
+            return UIFont.Weight.regular
+        }
+        
     }
 }
